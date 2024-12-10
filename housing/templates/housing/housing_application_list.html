@@ -1,0 +1,21 @@
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+
+<h1>Housing Applications</h1>
+<ul>
+    {% for housing_application in object_list %}
+        <li>
+            <a href="{% url 'housing_application_detail' housing_application.pk %}">
+                {{ housing_application.tenant.name }} - {{ housing_application.status }}
+            </a>
+            <a href="{% url 'housing_application_edit' housing_application.pk %}">Edit</a>
+            <a href="{% url 'housing_application_delete' housing_application.pk %}">Delete</a>
+        </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'housing_application_create' %}">Add Housing Application</a>

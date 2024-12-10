@@ -1,0 +1,148 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        /* Container for charts */
+        .chart-container {
+            display: flex;
+            justify-content: center; /* Center the charts horizontally */
+            flex-wrap: wrap; /* Allow wrapping for multiple charts */
+            gap: 30px; /* Add spacing between charts */
+        }
+
+        .chart-wrapper {
+            width: 400px; /* Set a fixed width */
+            height: 400px; /* Set a fixed height */
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Add some space between the title and the charts */
+        canvas {
+            display: block; /* Ensure the canvas element is block-level */
+            margin: 0 auto; /* Center the canvas within its container */
+        }
+    </style>
+</head>
+<body>
+    <h1>Statistics</h1>
+    
+    <!-- Charts Section -->
+    <div class="chart-container">
+        <!-- Housing Applications Chart -->
+        <div class="chart-wrapper">
+            <h2>Housing Applications by Tenant</h2>
+            <canvas id="applicationsPieChart"></canvas>
+        </div>
+
+        <!-- Rental Payments Chart -->
+        <div class="chart-wrapper">
+            <h2>Rental Payments by Tenant</h2>
+            <canvas id="paymentsBarChart"></canvas>
+        </div>
+    </div>
+
+    <!-- JSON Data -->
+    {{ tenant_names|json_script:"tenant-names-data" }}
+    {{ application_counts|json_script:"application-counts-data" }}
+    {{ total_payments|json_script:"total-payments-data" }}
+
+    <!-- Script -->
+    <script>
+        // Parse JSON data
+        const tenantNames = JSON.parse(document.getElementById('tenant-names-data').textContent);
+        const applicationCounts = JSON.parse(document.getElementById('application-counts-data').textContent);
+        const totalPayments = JSON.parse(document.getElementById('total-payments-data').textContent);
+
+        // Convert null values to 0 in totalPayments
+        const cleanedPayments = totalPayments.map(payment => payment === null ? 0 : payment);
+
+        // Chart for Applications
+        const applicationsCtx = document.getElementById('applicationsPieChart').getContext('2d');
+        const applicationsPieChart = new Chart(applicationsCtx, {
+            type: 'pie',
+            data: {
+                labels: tenantNames,
+                datasets: [{
+                    label: 'Number of Applications',
+                    data: applicationCounts,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)',
+                        'rgba(255, 159, 64, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                }
+            }
+        });
+
+        // Chart for Payments
+        const paymentsCtx = document.getElementById('paymentsBarChart').getContext('2d');
+        const paymentsBarChart = new Chart(paymentsCtx, {
+            type: 'bar',
+            data: {
+                labels: tenantNames,
+                datasets: [{
+                    label: 'Total Payments (in currency)',
+                    data: cleanedPayments,
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

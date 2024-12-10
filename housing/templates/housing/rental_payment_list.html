@@ -1,0 +1,21 @@
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+
+<h1>Rental Payments</h1>
+<ul>
+    {% for rental_payment in object_list %}
+        <li>
+            <a href="{% url 'rental_payment_detail' rental_payment.pk %}">
+                {{ rental_payment.tenant.name }} - {{ rental_payment.amount }}
+            </a>
+            <a href="{% url 'rental_payment_edit' rental_payment.pk %}">Edit</a>
+            <a href="{% url 'rental_payment_delete' rental_payment.pk %}">Delete</a>
+        </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'rental_payment_create' %}">Add Rental Payment</a>

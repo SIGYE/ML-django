@@ -1,0 +1,15 @@
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+
+<h1>Application Details</h1>
+<p>Tenant: {{ object.tenant.name }}</p>
+<p>Application Date: {{ object.housing_application_date }}</p>
+<p>Status: {{ object.status }}</p>
+<a href="{% url 'housing_application_edit' object.pk %}">Edit</a>
+<a href="{% url 'housing_application_delete' object.pk %}">Delete</a>
+<a href="{% url 'housing_application_list' %}">Back to list</a>

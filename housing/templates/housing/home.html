@@ -1,0 +1,18 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Home</title>
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    </head>
+<body>
+    <h1>Welcome to the Housing Management System</h1>
+    <p><a href="{% url 'tenant_list' %}">View Tenants</a></p>
+    <p><a href="{% url 'housing_application_list' %}">View Applications</a></p>
+    <p><a href="{% url 'rental_payment_list' %}">View Payments</a></p>
+    <p><a href="{% url 'statistics' %}">View Statistics</a></p>
+</body>
+</html>

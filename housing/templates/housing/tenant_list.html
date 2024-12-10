@@ -1,0 +1,19 @@
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+
+<h1>Tenant List</h1>
+<ul>
+    {% for tenant in object_list %}
+        <li>
+            <a href="{% url 'tenant_detail' tenant.pk %}">{{ tenant.name }}</a>
+            <a href="{% url 'tenant_edit' tenant.pk %}">Edit</a>
+            <a href="{% url 'tenant_delete' tenant.pk %}">Delete</a>
+        </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'tenant_create' %}">Add Tenant</a>
